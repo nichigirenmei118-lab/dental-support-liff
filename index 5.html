@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>歯科技工士応援アンケート</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      padding: 30px;
+      line-height: 1.7;
+      color: #222;
+    }
+    #status {
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>歯科技工士応援アンケート</h2>
+  <div id="status">LINEに接続しています…</div>
+
+  <script>
+    const LIFF_ID = '2011583136-fgg3SOk1';
+
+    const SURVEY_URL =
+      'https://script.google.com/macros/s/AKfycby4FUsehiXyFsRQ38MKCIrTtXem-PIA6CbzNvyCwMgXDQIPNBhwLzv5ffFIHZ4Q4m_VFA/exec';
+
+    async function main() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+
+        const profile = await liff.getProfile();
+
+        document.getElementById('status').innerHTML =
+          'LINE認証に成功しました。<br>アンケート画面へ移動します…';
+
+        const params = new URLSearchParams({
+          lineUserId: profile.userId,
+          lineDisplayName: profile.displayName
+        });
+
+        window.location.href = SURVEY_URL + '?' + params.toString();
+
+      } catch (error) {
+        document.getElementById('status').innerText =
+          'LIFF接続エラー：' + error.message;
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
